@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+<title>StufaTech Pro — Rapportini &amp; Gestione Manutenzione Stufe</title>
+<style>
+  :root {
+    --bg: #eef2f6;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --border: #cbd5e1;
+    --border-strong: #94a3b8;
+    --text: #111827;
+    --text-muted: #475569;
+    --accent: #c2410c;
+    --accent-hover: #9a3412;
+    --accent-soft: #fff7ed;
+    --accent-border: #fdba74;
+    --ok: #15803d;
+    --ok-bg: #f0fdf4;
+    --ok-border: #86efac;
+    --warn: #b45309;
+    --warn-bg: #fffbeb;
+    --warn-border: #fcd34d;
+    --err: #b91c1c;
+    --err-bg: #fef2f2;
+    --err-border: #fca5a5;
+    --nav-bg: #1e293b;
+    --nav-text: #f8fafc;
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
+  .topbar {
+    background: var(--nav-bg);
+    color: var(--nav-text);
+    padding: 14px 16px;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-sub {
+    font-size: 13px;
+    color: #cbd5e1;
+  }
+
+  .status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .pill-ok {
+    background: #14532d;
+    border-color: #4ade80;
+    color: #dcfce7;
+  }
+
+  .pill-warn {
+    background: #78350f;
+    border-color: #fbbf24;
+    color: #fef3c7;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn:hover {
+    background: #f1f5f9;
+  }
+
+  .btn-sm {
+    min-height: 38px;
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn-success {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: #ffffff;
+  }
+
+  .btn-success:hover {
+    background: #166534;
+  }
+
+  .btn-danger {
+    background: var(--err-bg);
+    border-color: var(--err-border);
+    color: var(--err);
+  }
+
+  .nav-tabs-wrap {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
+  }
+
+  .nav-tabs {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    min-height: 44px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 18px auto 48px;
+    padding: 0 16px;
+  }
+
+  .view {
+    display: none;
+  }
+
+  .view.active {
+    display: block;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .card-desc {
+    margin: 0 0 14px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  @media (min-width: 768px) {
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .two-col-desktop {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: start;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .req {
+    color: var(--err);
+    font-weight: 800;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 3px solid rgba(194, 65, 12, 0.25);
+    border-color: var(--accent);
+  }
+
+  .time-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .time-row input {
+    flex: 1;
+  }
+
+  .check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .check-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--surface-alt);
+  }
+
+  .check-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .check-top input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+  }
+
+  .check-label {
+    font-weight: 700;
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .check-note {
+    margin-top: 8px;
+  }
+
+  .param-box {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+  }
+
+  .sig-wrap {
+    border: 1.5px solid var(--border-strong);
+    border-radius: 8px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  canvas.sig-pad {
+    display: block;
+    width: 100%;
+    height: 180px;
+    touch-action: none;
+    cursor: crosshair;
+  }
+
+  .photo-preview {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: none;
+  }
+
+  .alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid transparent;
+  }
+
+  .alert-ok {
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
+    color: var(--ok);
+  }
+
+  .alert-warn {
+    background: var(--warn-bg);
+    border-color: var(--warn-border);
+    color: var(--warn);
+  }
+
+  .alert-err {
+    background: var(--err-bg);
+    border-color: var(--err-border);
+    color: var(--err);
+  }
+
+  .actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .record-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    background: #ffffff;
+    margin-bottom: 12px;
+  }
+
+  .record-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .record-title {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .record-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .a4-sheet {
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 24px;
+    font-size: 14px;
+  }
+
+  .a4-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .a4-section {
+    margin-bottom: 14px;
+  }
+
+  .a4-section-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+
+  .a4-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 16px;
+  }
+
+  .a4-sig-img {
+    max-height: 90px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 4px;
+  }
+
+  .locked-box {
+    text-align: center;
+    padding: 28px 18px;
+    background: var(--surface-alt);
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+  }
+
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+    body {
+      background: #ffffff;
+      color: #000000;
+      font-size: 12pt;
+    }
+    .topbar,
+    .nav-tabs-wrap,
+    .no-print,
+    .btn {
+      display: none !important;
+    }
+    .container {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .card {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    .a4-sheet {
+      border: none;
+      padding: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-badge">ST</div>
+      <div>
+        <div class="brand-title">StufaTech Pro</div>
+        <div class="brand-sub" id="hdr-company">TermoStufe &amp; Caminetti Srl &bull; Squadra: <strong id="hdr-team">STUFE-2026</strong></div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill pill-ok" id="hdr-net">Online &bull; Sync Attivo</span>
+      <span class="pill" id="hdr-role">Ufficio / Admin</span>
+      <button type="button" class="btn btn-sm btn-primary" id="btn-toggle-role" onclick="toggleRoleFlow()">Passa a Tecnico</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-tabs-wrap no-print" aria-label="Navigazione principale">
+  <div class="nav-tabs">
+    <button type="button" class="tab-btn active" data-tab="compila" onclick="switchTab('compila')">Compila Rapporto</button>
+    <button type="button" class="tab-btn" data-tab="archivio" onclick="switchTab('archivio')">Archivio &amp; PDF</button>
+    <button type="button" class="tab-btn" data-tab="storico" onclick="switchTab('storico')">Storico Clienti</button>
+    <button type="button" class="tab-btn" data-tab="scadenze" onclick="switchTab('scadenze')">Scadenze &amp; Invii</button>
+    <button type="button" class="tab-btn" data-tab="azienda" onclick="switchTab('azienda')">Azienda &amp; Sync</button>
+  </div>
+</nav>
+
+<main class="container">
+  <div id="global-notice"></div>
+
+  <!-- SCHEDA 1: COMPILA RAPPORTO -->
+  <section id="view-compila" class="view active">
+    <div class="card">
+      <h2 class="card-title">1. Dati Intervento &amp; Anagrafica Cliente</h2>
+      <p class="card-desc">I campi contrassegnati con <span class="req">*</span> sono obbligatori prima del salvataggio.</p>
+
+      <div class="grid-3">
+        <div class="field">
+          <label for="f-data">Data Intervento <span class="req">*</span></label>
+          <input type="date" id="f-data" onchange="calcNextDueDate()">
+        </div>
+        <div class="field">
+          <label for="f-scadenza">Scadenza Pulizia (+12 mesi)</label>
+          <input type="date" id="f-scadenza">
+          <span class="hint">Calcolata in automatico e modificabile</span>
+        </div>
+        <div class="field">
+          <label for="f-tecnico">Tecnico Incaricato <span class="req">*</span></label>
+          <input type="text" id="f-tecnico" placeholder="Es. Marco Bianchi">
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label>Orario Inizio</label>
+          <div class="time-row">
+            <input type="time" id="f-ora-inizio">
+            <button type="button" class="btn btn-sm" onclick="setNowTime('f-ora-inizio')">Adesso</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Orario Fine</label>
+          <div class="time-row">
+            <input type="time" id="f-ora-fine">
+            <button type="button" class="btn btn-sm" onclick="setNowTime('f-ora-fine')">Adesso</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label for="f-cliente">Nome e Cognome / Ragione Sociale <span class="req">*</span></label>
+          <input type="text" id="f-cliente" placeholder="Es. Laura Verdi o Verdi Srl">
+        </div>
+        <div class="field">
+          <label for="f-telefono">Telefono Cliente <span class="req">*</span></label>
+          <input type="tel" id="f-telefono" placeholder="Es. 3331234567">
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label for="f-indirizzo">Indirizzo Intervento <span class="req">*</span></label>
+          <input type="text" id="f-indirizzo" placeholder="Via, civico, CAP, città">
+        </div>
+        <div class="field">
+          <label for="f-email">Email Cliente (per promemoria annuale)</label>
+          <input type="email" id="f-email" placeholder="cliente@esempio.it">
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label for="f-modello">Modello Stufa / Generatore <span class="req">*</span></label>
+          <input type="text" id="f-modello" placeholder="Es. IdroPellet 18 kW / Caminetto Legna">
+        </div>
+        <div class="field">
+          <label for="f-tipo">Tipo Intervento</label>
+          <select id="f-tipo">
+            <option value="Pulizia Straordinaria & Manutenzione">Pulizia Straordinaria &amp; Manutenzione</option>
+            <option value="Pulizia Annuale Programmata">Pulizia Annuale Programmata</option>
+            <option value="Prima Accensione / Collaudo">Prima Accensione / Collaudo</option>
+            <option value="Riparazione / Sostituzione Componenti">Riparazione / Sostituzione Componenti</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">2. Checklist Operativa &amp; Regolazione Parametri</h2>
+      <p class="card-desc">Spunta le attività svolte e compila i valori di regolazione parametri quando applicabili.</p>
+
+      <div class="check-list" id="checklist-container"></div>
+
+      <div class="param-box">
+        <div class="card-title" style="font-size:16px; margin-bottom:8px;">Regolazione Parametri Tecnici</div>
+        <div class="grid-3">
+          <div class="field">
+            <label for="p-coclea">Coclea / Carico Pellet (%)</label>
+            <input type="text" id="p-coclea" placeholder="Es. P1 -10%, P5 +5%">
+          </div>
+          <div class="field">
+            <label for="p-fumi">Estrattore Fumi (RPM / %)</label>
+            <input type="text" id="p-fumi" placeholder="Es. 1850 RPM / +8%">
+          </div>
+          <div class="field">
+            <label for="p-temp">Temp. Fumi / Mandata (°C)</label>
+            <input type="text" id="p-temp" placeholder="Es. Fumi 145°C / Acqua 62°C">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label for="p-note">Note Regolazione &amp; Esito Prova Tiraggio</label>
+          <textarea id="p-note" placeholder="Es. Fiamma viva e stabile, guarnizioni porta ok, tiraggio canna fumaria verificato."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">3. Foto Intervento &amp; Firma Digitale Cliente</h2>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="f-foto">Foto Intervento (opzionale)</label>
+          <input type="file" id="f-foto" accept="image/*" capture="environment" onchange="handlePhotoChange(event)">
+          <span class="hint">Allega una foto del lavoro o della targhetta dati</span>
+          <img id="f-foto-preview" class="photo-preview" alt="Anteprima foto intervento">
+          <button type="button" class="btn btn-sm" style="margin-top:6px; align-self:flex-start;" onclick="clearPhoto()">Rimuovi foto</button>
+        </div>
+
+        <div class="field">
+          <label>Firma Digitale Cliente <span class="req">*</span></label>
+          <div class="sig-wrap">
+            <canvas id="sig-canvas" class="sig-pad" width="500" height="180"></canvas>
+          </div>
+          <div class="actions-bar" style="margin-top:8px;">
+            <button type="button" class="btn btn-sm" onclick="clearSignature()">Pulisci firma</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button type="button" class="btn btn-primary" onclick="saveReport(true)">Salva e invia Subito al PC Ufficio</button>
+        <button type="button" class="btn" onclick="saveReport(false)">Salva in Archivio Locale</button>
+        <button type="button" class="btn btn-success" onclick="sendCurrentWhatsApp()">Invia Riepilogo WhatsApp Cliente</button>
+        <button type="button" class="btn" onclick="previewCurrentForm()">Anteprima PDF</button>
+        <button type="button" class="btn btn-danger" onclick="resetForm()">Svuota Modulo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDA 2: ARCHIVIO & PDF -->
+  <section id="view-archivio" class="view">
+    <div id="archivio-lock"></div>
+    <div id="archivio-content" class="two-col-desktop">
+      <div class="card">
+        <h2 class="card-title">Archivio Rapportini</h2>
+        <p class="card-desc">Seleziona un rapportino per ispezionarlo, generare il PDF A4 o inviare il riepilogo WhatsApp.</p>
+        <div class="field" style="margin-bottom:12px;">
+          <label for="search-reports">Cerca cliente, modello o tecnico</label>
+          <input type="text" id="search-reports" placeholder="Digita per filtrare..." oninput="renderArchive()">
+        </div>
+        <div id="archive-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="actions-bar no-print" style="margin-top:0; margin-bottom:14px;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Stampa / Salva PDF A4</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="sendSelectedWhatsApp()">Invia WhatsApp Cliente</button>
+        </div>
+        <div id="a4-preview-box" class="a4-sheet"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDA 3: STORICO CLIENTI -->
+  <section id="view-storico" class="view">
+    <div id="storico-lock"></div>
+    <div id="storico-content" class="card">
+      <h2 class="card-title">Storico Clienti &amp; Impianti</h2>
+      <p class="card-desc">Riepilogo interventi eseguiti e date di scadenza pulizia annuale per cliente.</p>
+      <div class="field" style="margin-bottom:12px;">
+        <label for="search-clients">Filtra clienti</label>
+        <input type="text" id="search-clients" placeholder="Nome, telefono o indirizzo..." oninput="renderClientsHistory()">
+      </div>
+      <div id="clients-list"></div>
+    </div>
+  </section>
+
+  <!-- SCHEDA 4: SCADENZE & INVII -->
+  <section id="view-scadenze" class="view">
+    <div id="scadenze-lock"></div>
+    <div id="scadenze-content">
+      <div class="card">
+        <h2 class="card-title">Scadenzario Pulizia Annuale</h2>
+        <p class="card-desc">Impianti in scadenza o scaduti con invio rapido promemoria via WhatsApp o Email.</p>
+        <div id="due-list"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Coda Sincronizzazione &amp; Modelli Messaggi</h2>
+        <p class="card-desc">Stato della coda verso l'ufficio e modelli personalizzabili per WhatsApp/promemoria.</p>
+        <div id="sync-queue-box" style="margin-bottom:14px;"></div>
+
+        <div class="field">
+          <label for="tpl-whatsapp">Modello Riepilogo WhatsApp al Cliente</label>
+          <textarea id="tpl-whatsapp"></textarea>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label for="tpl-reminder">Modello Promemoria Scadenza Annuale</label>
+          <textarea id="tpl-reminder"></textarea>
+        </div>
+        <div class="actions-bar">
+          <button type="button" class="btn btn-primary btn-sm" onclick="saveTemplates()">Salva Modelli</button>
+          <button type="button" class="btn btn-sm" onclick="flushSyncQueue()">Sincronizza Coda Ora</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDA 5: AZIENDA & SYNC -->
+  <section id="view-azienda" class="view">
+    <div id="azienda-lock"></div>
+    <div id="azienda-content" class="card">
+      <h2 class="card-title">Impostazioni Azienda, PIN &amp; Codice Squadra</h2>
+      <p class="card-desc">Allinea il <strong>Codice Squadra</strong> su PC e iPhone per condividere i dati e proteggi l'area ufficio con PIN.</p>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="cfg-company">Nome Azienda</label>
+          <input type="text" id="cfg-company">
+        </div>
+        <div class="field">
+          <label for="cfg-team">Codice Squadra / Azienda</label>
+          <input type="text" id="cfg-team">
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label for="cfg-pin">PIN Ufficio / Admin</label>
+          <input type="password" id="cfg-pin" maxlength="8" placeholder="Predefinito: 1234">
+        </div>
+        <div class="field">
+          <label for="cfg-webhook">URL Webhook / Endpoint Sync (opzionale)</label>
+          <input type="text" id="cfg-webhook" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button type="button" class="btn btn-primary" onclick="saveCompanySettings()">Salva Impostazioni</button>
+        <button type="button" class="btn" onclick="exportBackupJson()">Esporta Backup JSON</button>
+        <button type="button" class="btn btn-danger" onclick="resetDemoData()">Ripristina Dati Esempio</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const STORAGE_KEY = "stufatech_pro_v2_state";
+const CHECKLIST_ITEMS = [
+  { id: "braciere", label: "Pulizia braciere, camera di combustione e scambiatore", hasParam: false },
+  { id: "canne", label: "Verifica e pulizia condotto scarico fumi / canna fumaria", hasParam: false },
+  { id: "guarnizioni", label: "Controllo guarnizioni porta, vetro ceramico e tenuta stagna", hasParam: false },
+  { id: "ventole", label: "Pulizia ventola aria ambiente / estrattore fumi e pressostato", hasParam: false },
+  { id: "parametri", label: "Regolazione parametri (coclea, fumi, aria, temperatura)", hasParam: true }
+];
+
+const DEFAULT_STATE = {
+  role: "admin",
+  adminUnlocked: true,
+  company: {
+    name: "TermoStufe & Caminetti Srl",
+    teamCode: "STUFE-2026",
+    pin: "1234",
+    webhook: ""
+  },
+  templates: {
+    whatsapp: "Gentile {cliente}, grazie per aver scelto {azienda}. Intervento del {data} ({tipo}) su {modello} completato. Scadenza prossima pulizia: {scadenza}.",
+    reminder: "Gentile {cliente}, le ricordiamo che la manutenzione annuale per {modello} presso {indirizzo} è prevista entro il {scadenza}. Contatti {azienda} per fissare l'appuntamento."
+  },
+  reports: [
+    {
+      id: "RPT-1001",
+      date: "2026-10-15",
+      dueDate: "2027-10-15",
+      tech: "Marco Bianchi",
+      startTime: "09:00",
+      endTime: "10:30",
+      client: "Laura Verdi",
+      phone: "3331234567",
+      address: "Via Roma 14, 92019 Sciacca AG",
+      email: "laura.verdi@esempio.it",
+      model: "IdroPellet 18 kW",
+      type: "Pulizia Straordinaria & Manutenzione",
+      checks: {
+        braciere: { checked: true, note: "Braciere e scambiatore liberati da residui carboniosi" },
+        canne: { checked: true, note: "Condotto fumi pulito e tiraggio regolare" },
+        guarnizioni: { checked: true, note: "Guarnizione porta integra" },
+        ventole: { checked: true, note: "Estrattore fumi pulito" },
+        parametri: { checked: true, note: "Taratura fine stagione" }
+      },
+      params: {
+        coclea: "P1 -5%, P5 +2%",
+        fumi: "1820 RPM",
+        temp: "Fumi 142°C / Mandata 60°C",
+        note: "Fiamma regolare, nessuna anomalia."
+      },
+      photo: "",
+      signature: "",
+      synced: true,
+      teamCode: "STUFE-2026"
+    },
+    {
+      id: "RPT-1002",
+      date: "2025-11-10",
+      dueDate: "2026-11-10",
+      tech: "Luca Conti",
+      startTime: "15:00",
+      endTime: "16:15",
+      client: " Officina Meccanica Sud Srl",
+      phone: "3389876543",
+      address: "Contrada Perriera 8, 92019 Sciacca AG",
+      email: "amministrazione@officinasud.it",
+      model: "Termocamino Legna 24 kW",
+      type: "Pulizia Annuale Programmata",
+      checks: {
+        braciere: { checked: true, note: "Pulizia completa focolare" },
+        canne: { checked: true, note: "Canna fumaria ispezionata" },
+        guarnizioni: { checked: true, note: "Tenuta verificata" },
+        ventole: { checked: false, note: "" },
+        parametri: { checked: false, note: "" }
+      },
+      params: {
+        coclea: "",
+        fumi: "",
+        temp: "Mandata 65°C",
+        note: "Prossima pulizia annuale in scadenza."
+      },
+      photo: "",
+      signature: "",
+      synced: true,
+      teamCode: "STUFE-2026"
+    }
+  ],
+  queue: [],
+  selectedReportId: "RPT-1001"
+};
+
+let state = loadState();
+let currentPhotoData = "";
+let isDrawingSig = false;
+let hasSigDrawn = false;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(DEFAULT_STATE);
+    const parsed = JSON.parse(raw);
+    return {
+      ...structuredClone(DEFAULT_STATE),
+      ...parsed,
+      company: { ...DEFAULT_STATE.company, ...(parsed.company || {}) },
+      templates: { ...DEFAULT_STATE.templates, ...(parsed.templates || {}) },
+      reports: Array.isArray(parsed.reports) ? parsed.reports : structuredClone(DEFAULT_STATE.reports),
+      queue: Array.isArray(parsed.queue) ? parsed.queue : []
+    };
+  } catch (e) {
+    return structuredClone(DEFAULT_STATE);
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    showNotice("Attenzione: impossibile salvare in memoria locale (verifica che il browser non sia in navigazione privata).", "warn");
+  }
+}
+
+function showNotice(msg, type = "ok") {
+  const box = document.getElementById("global-notice");
+  if (!box) return;
+  const cls = type === "err" ? "alert-err" : type === "warn" ? "alert-warn" : "alert-ok";
+  box.innerHTML = `<div class="alert ${cls}">${escapeHtml(msg)}</div>`;
+  clearTimeout(showNotice._t);
+  showNotice._t = setTimeout(() => {
+    box.innerHTML = "";
+  }, 5000);
+}
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function renderChecklist() {
+  const wrap = document.getElementById("checklist-container");
+  wrap.innerHTML = CHECKLIST_ITEMS.map(item => `
+    <div class="check-item">
+      <div class="check-top">
+        <input type="checkbox" id="chk-${item.id}">
+        <label class="check-label" for="chk-${item.id}">${escapeHtml(item.label)}</label>
+      </div>
+      <div class="check-note">
+        <input type="text" id="chk-note-${item.id}" placeholder="Note voce (opzionale)">
+      </div>
+    </div>
+  `).join("");
+}
+
+function calcNextDueDate() {
+  const dVal = document.getElementById("f-data").value;
+  if (!dVal) return;
+  const parts = dVal.split("-");
+  if (parts.length !== 3) return;
+  const y = parseInt(parts[0], 10) + 1;
+  const m = parts[1];
+  const day = parts[2];
+  document.getElementById("f-scadenza").value = `${y}-${m}-${day}`;
+}
+
+function setNowTime(inputId) {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  document.getElementById(inputId).value = `${hh}:${mm}`;
+}
+
+function handlePhotoChange(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    currentPhotoData = e.target.result || "";
+    const img = document.getElementById("f-foto-preview");
+    img.src = currentPhotoData;
+    img.style.display = currentPhotoData ? "block" : "none";
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  currentPhotoData = "";
+  document.getElementById("f-foto").value = "";
+  const img = document.getElementById("f-foto-preview");
+  img.src = "";
+  img.style.display = "none";
+}
+
+function initSignatureCanvas() {
+  const canvas = document.getElementById("sig-canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.lineWidth = 2.6;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#111827";
+
+  function getPos(ev) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  function startDraw(ev) {
+    ev.preventDefault();
+    isDrawingSig = true;
+    hasSigDrawn = true;
+    const pos = getPos(ev);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function moveDraw(ev) {
+    if (!isDrawingSig) return;
+    ev.preventDefault();
+    const pos = getPos(ev);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  }
+
+  function endDraw(ev) {
+    if (!isDrawingSig) return;
+    ev.preventDefault();
+    isDrawingSig = false;
+  }
+
+  canvas.addEventListener("mousedown", startDraw);
+  canvas.addEventListener("mousemove", moveDraw);
+  window.addEventListener("mouseup", endDraw);
+
+  canvas.addEventListener("touchstart", startDraw, { passive: false });
+  canvas.addEventListener("touchmove", moveDraw, { passive: false });
+  window.addEventListener("touchend", endDraw, { passive: false });
+}
+
+function clearSignature() {
+  const canvas = document.getElementById("sig-canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hasSigDrawn = false;
+}
+
+function getSignatureData() {
+  if (!hasSigDrawn) return "";
+  return document.getElementById("sig-canvas").toDataURL("image/png");
+}
+
+function collectFormReport() {
+  const checks = {};
+  CHECKLIST_ITEMS.forEach(item => {
+    checks[item.id] = {
+      checked: document.getElementById(`chk-${item.id}`).checked,
+      note: document.getElementById(`chk-note-${item.id}`).value.trim()
+    };
+  });
+
+  return {
+    id: "RPT-" + Math.floor(1000 + Math.random() * 9000),
+    date: document.getElementById("f-data").value,
+    dueDate: document.getElementById("f-scadenza").value,
+    tech: document.getElementById("f-tecnico").value.trim(),
+    startTime: document.getElementById("f-ora-inizio").value,
+    endTime: document.getElementById("f-ora-fine").value,
+    client: document.getElementById("f-cliente").value.trim(),
+    phone: document.getElementById("f-telefono").value.trim(),
+    address: document.getElementById("f-indirizzo").value.trim(),
+    email: document.getElementById("f-email").value.trim(),
+    model: document.getElementById("f-modello").value.trim(),
+    type: document.getElementById("f-tipo").value,
+    checks,
+    params: {
+      coclea: document.getElementById("p-coclea").value.trim(),
+      fumi: document.getElementById("p-fumi").value.trim(),
+      temp: document.getElementById("p-temp").value.trim(),
+      note: document.getElementById("p-note").value.trim()
+    },
+    photo: currentPhotoData,
+    signature: getSignatureData(),
+    synced: false,
+    teamCode: state.company.teamCode
+  };
+}
+
+function validateReport(r) {
+  const missing = [];
+  if (!r.date) missing.push("Data Intervento");
+  if (!r.tech) missing.push("Tecnico Incaricato");
+  if (!r.client) missing.push("Nome e Cognome / Ragione Sociale");
+  if (!r.phone) missing.push("Telefono Cliente");
+  if (!r.address) missing.push("Indirizzo Intervento");
+  if (!r.model) missing.push("Modello Stufa / Generatore");
+  if (!r.signature) missing.push("Firma Digitale Cliente");
+  return missing;
+}
+
+function saveReport(sendImmediate) {
+  const r = collectFormReport();
+  const missing = validateReport(r);
+  if (missing.length > 0) {
+    showNotice("Compila i campi obbligatori mancanti: " + missing.join(", ") + ".", "err");
+    return;
+  }
+
+  if (sendImmediate) {
+    if (navigator.onLine) {
+      r.synced = true;
+    } else {
+      r.synced = false;
+      state.queue.push({ reportId: r.id, queuedAt: new Date().toISOString() });
+    }
+  }
+
+  state.reports.unshift(r);
+  state.selectedReportId = r.id;
+  saveState();
+  renderAll();
+
+  if (sendImmediate && navigator.onLine) {
+    showNotice(`Rapportino ${r.id} salvato e sincronizzato per squadra ${state.company.teamCode}.`, "ok");
+  } else if (sendImmediate && !navigator.onLine) {
+    showNotice(`Rapportino ${r.id} salvato in locale e messo in coda sync (offline).`, "warn");
+  } else {
+    showNotice(`Rapportino ${r.id} salvato nell'archivio locale.`, "ok");
+  }
+}
+
+function resetForm() {
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById("f-data").value = today;
+  calcNextDueDate();
+  document.getElementById("f-tecnico").value = "";
+  document.getElementById("f-ora-inizio").value = "";
+  document.getElementById("f-ora-fine").value = "";
+  document.getElementById("f-cliente").value = "";
+  document.getElementById("f-telefono").value = "";
+  document.getElementById("f-indirizzo").value = "";
+  document.getElementById("f-email").value = "";
+  document.getElementById("f-modello").value = "";
+  document.getElementById("p-coclea").value = "";
+  document.getElementById("p-fumi").value = "";
+  document.getElementById("p-temp").value = "";
+  document.getElementById("p-note").value = "";
+  CHECKLIST_ITEMS.forEach(item => {
+    document.getElementById(`chk-${item.id}`).checked = false;
+    document.getElementById(`chk-note-${item.id}`).value = "";
+  });
+  clearPhoto();
+  clearSignature();
+}
+
+function formatMessage(tpl, r) {
+  return String(tpl || "")
+    .replaceAll("{cliente}", r.client || "")
+    .replaceAll("{azienda}", state.company.name || "")
+    .replaceAll("{data}", r.date || "")
+    .replaceAll("{tipo}", r.type || "")
+    .replaceAll("{modello}", r.model || "")
+    .replaceAll("{scadenza}", r.dueDate || "")
+    .replaceAll("{indirizzo}", r.address || "");
+}
+
+function openWhatsAppForReport(r) {
+  if (!r) return;
+  const cleanPhone = String(r.phone || "").replace(/\D/g, "");
+  const text = formatMessage(state.templates.whatsapp, r);
+  const url = cleanPhone
+    ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`
+    : `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank", "noopener");
+}
+
+function sendCurrentWhatsApp() {
+  const draft = collectFormReport();
+  if (!draft.client) {
+    showNotice("Inserisci almeno il nome cliente prima di preparare il messaggio WhatsApp.", "warn");
+    return;
+  }
+  openWhatsAppForReport(draft);
+}
+
+function sendSelectedWhatsApp() {
+  const r = state.reports.find(x => x.id === state.selectedReportId) || state.reports[0];
+  if (!r) {
+    showNotice("Nessun rapportino selezionato.", "warn");
+    return;
+  }
+  openWhatsAppForReport(r);
+}
+
+function previewCurrentForm() {
+  const draft = collectFormReport();
+  if (!draft.client) draft.client = "Anteprima Cliente";
+  if (!draft.date) draft.date = new Date().toISOString().slice(0, 10);
+  state.selectedReportId = draft.id;
+  renderA4(draft);
+  switchTab("archivio");
+}
+
+function renderA4(r) {
+  const box = document.getElementById("a4-preview-box");
+  if (!r) {
+    box.innerHTML = "<p>Nessun rapportino da visualizzare.</p>";
+    return;
+  }
+
+  const doneChecks = CHECKLIST_ITEMS
+    .filter(item => r.checks && r.checks[item.id] && r.checks[item.id].checked)
+    .map(item => {
+      const note = r.checks[item.id].note ? ` — <em>${escapeHtml(r.checks[item.id].note)}</em>` : "";
+      return `<li>${escapeHtml(item.label)}${note}</li>`;
+    })
+    .join("");
+
+  box.innerHTML = `
+    <div class="a4-header">
+      <div>
+        <div style="font-size:18px; font-weight:800;">${escapeHtml(state.company.name)}</div>
+        <div style="font-size:13px; color:#475569;">Squadra: ${escapeHtml(r.teamCode || state.company.teamCode)} &bull; Rapporto N. ${escapeHtml(r.id)}</div>
+      </div>
+      <div style="text-align:right; font-size:13px;">
+        <div><strong>Data:</strong> ${escapeHtml(r.date)}</div>
+        <div><strong>Scadenza:</strong> ${escapeHtml(r.dueDate || "-")}</div>
+      </div>
+    </div>
+
+    <div class="a4-section">
+      <div class="a4-section-title">Cliente &amp; Impianto</div>
+      <div class="a4-grid">
+        <div><strong>Cliente:</strong> ${escapeHtml(r.client)}</div>
+        <div><strong>Telefono:</strong> ${escapeHtml(r.phone)}</div>
+        <div><strong>Indirizzo:</strong> ${escapeHtml(r.address)}</div>
+        <div><strong>Modello:</strong> ${escapeHtml(r.model)}</div>
+        <div><strong>Tecnico:</strong> ${escapeHtml(r.tech || "-")}</div>
+        <div><strong>Orario:</strong> ${escapeHtml(r.startTime || "--:--")} - ${escapeHtml(r.endTime || "--:--")}</div>
+      </div>
+    </div>
+
+    <div class="a4-section">
+      <div class="a4-section-title">Attività Svolte &amp; Parametri</div>
+      ${doneChecks ? `<ul style="margin:6px 0 10px 18px;">${doneChecks}</ul>` : "<p>Nessuna voce spuntata.</p>"}
+      <div class="a4-grid">
+        <div><strong>Coclea:</strong> ${escapeHtml(r.params?.coclea || "-")}</div>
+        <div><strong>Estrattore Fumi:</strong> ${escapeHtml(r.params?.fumi || "-")}</div>
+        <div><strong>Temperature:</strong> ${escapeHtml(r.params?.temp || "-")}</div>
+        <div><strong>Note:</strong> ${escapeHtml(r.params?.note || "-")}</div>
+      </div>
+    </div>
+
+    <div class="a4-section">
+      <div class="a4-section-title">Firma Cliente</div>
+      ${r.signature
+        ? `<img src="${r.signature}" class="a4-sig-img" alt="Firma digitale cliente">`
+        : `<div style="padding:10px; border:1px dashed #94a3b8; font-size:13px; color:#475569;">Firma digitale non presente in anteprima/esempio</div>`
+      }
+    </div>
+  `;
+}
+
+function renderArchive() {
+  const q = (document.getElementById("search-reports")?.value || "").toLowerCase().trim();
+  const list = document.getElementById("archive-list");
+  const filtered = state.reports.filter(r =>
+    !q ||
+    (r.client || "").toLowerCase().includes(q) ||
+    (r.model || "").toLowerCase().includes(q) ||
+    (r.tech || "").toLowerCase().includes(q) ||
+    (r.id || "").toLowerCase().includes(q)
+  );
+
+  if (filtered.length === 0) {
+    list.innerHTML = "<p class='hint'>Nessun rapportino trovato con questo filtro.</p>";
+    renderA4(null);
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => `
+    <div class="record-card">
+      <div class="record-head">
+        <div class="record-title">${escapeHtml(r.client)} &mdash; ${escapeHtml(r.model)}</div>
+        <span class="pill ${r.synced ? "pill-ok" : "pill-warn"}" style="color:#111827;">${r.synced ? "Sincronizzato" : "In coda"}</span>
+      </div>
+      <div class="record-meta">${escapeHtml(r.id)} &bull; Data: ${escapeHtml(r.date)} &bull; Tecnico: ${escapeHtml(r.tech || "-")} &bull; Tel: ${escapeHtml(r.phone)}</div>
+      <div class="actions-bar" style="margin-top:10px;">
+        <button type="button" class="btn btn-sm btn-primary" onclick="selectReport('${escapeHtml(r.id)}')">Apri Anteprima</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="openWhatsAppById('${escapeHtml(r.id)}')">WhatsApp</button>
+      </div>
+    </div>
+  `).join("");
+
+  const current = filtered.find(r => r.id === state.selectedReportId) || filtered[0];
+  state.selectedReportId = current.id;
+  renderA4(current);
+}
+
+function selectReport(id) {
+  state.selectedReportId = id;
+  saveState();
+  renderArchive();
+}
+
+function openWhatsAppById(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (r) openWhatsAppForReport(r);
+}
+
+function renderClientsHistory() {
+  const q = (document.getElementById("search-clients")?.value || "").toLowerCase().trim();
+  const list = document.getElementById("clients-list");
+  const map = new Map();
+
+  state.reports.forEach(r => {
+    const key = `${(r.client || "").toLowerCase()}|${(r.phone || "").toLowerCase()}`;
+    if (!map.has(key)) {
+      map.set(key, {
+        client: r.client,
+        phone: r.phone,
+        address: r.address,
+        model: r.model,
+        lastDate: r.date,
+        dueDate: r.dueDate,
+        count: 1
+      });
+    } else {
+      const item = map.get(key);
+      item.count += 1;
+      if (r.date > item.lastDate) {
+        item.lastDate = r.date;
+        item.dueDate = r.dueDate;
+        item.model = r.model;
+      }
+    }
+  });
+
+  const rows = Array.from(map.values()).filter(c =>
+    !q ||
+    (c.client || "").toLowerCase().includes(q) ||
+    (c.phone || "").toLowerCase().includes(q) ||
+    (c.address || "").toLowerCase().includes(q)
+  );
+
+  if (rows.length === 0) {
+    list.innerHTML = "<p class='hint'>Nessun cliente trovato.</p>";
+    return;
+  }
+
+  list.innerHTML = rows.map(c => `
+    <div class="record-card">
+      <div class="record-head">
+        <div class="record-title">${escapeHtml(c.client)} (${c.count} ${c.count === 1 ? "intervento" : "interventi"})</div>
+        <div class="record-meta">Scadenza pulizia: <strong>${escapeHtml(c.dueDate || "-")}</strong></div>
+      </div>
+      <div class="record-meta">Impianto: ${escapeHtml(c.model)} &bull; Indirizzo: ${escapeHtml(c.address)} &bull; Tel: ${escapeHtml(c.phone)}</div>
+    </div>
+  `).join("");
+}
+
+function renderDueAndSync() {
+  const dueBox = document.getElementById("due-list");
+  const today = new Date().toISOString().slice(0, 10);
+
+  if (state.reports.length === 0) {
+    dueBox.innerHTML = "<p class='hint'>Nessuna scadenza registrata.</p>";
+  } else {
+    dueBox.innerHTML = state.reports.map(r => {
+      const isExpired = r.dueDate && r.dueDate <= today;
+      return `
+        <div class="record-card">
+          <div class="record-head">
+            <div class="record-title">${escapeHtml(r.client)} &mdash; ${escapeHtml(r.model)}</div>
+            <span class="pill ${isExpired ? "pill-warn" : "pill-ok"}" style="color:#111827;">${isExpired ? "In scadenza / Scaduta" : "Programmata"} (${escapeHtml(r.dueDate || "-")})</span>
+          </div>
+          <div class="record-meta">Tel: ${escapeHtml(r.phone)} &bull; Email: ${escapeHtml(r.email || "non indicata")}</div>
+          <div class="actions-bar" style="margin-top:10px;">
+            <button type="button" class="btn btn-sm btn-success" onclick="sendReminderWhatsApp('${escapeHtml(r.id)}')">Promemoria WhatsApp</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  const qBox = document.getElementById("sync-queue-box");
+  qBox.innerHTML = `<div class="alert ${state.queue.length ? "alert-warn" : "alert-ok"}">Elementi in coda sincronizzazione: <strong>${state.queue.length}</strong> &bull; Codice Squadra: <strong>${escapeHtml(state.company.teamCode)}</strong></div>`;
+
+  document.getElementById("tpl-whatsapp").value = state.templates.whatsapp;
+  document.getElementById("tpl-reminder").value = state.templates.reminder;
+}
+
+function sendReminderWhatsApp(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (!r) return;
+  const cleanPhone = String(r.phone || "").replace(/\D/g, "");
+  const text = formatMessage(state.templates.reminder, r);
+  const url = cleanPhone
+    ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`
+    : `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank", "noopener");
+}
+
+function saveTemplates() {
+  state.templates.whatsapp = document.getElementById("tpl-whatsapp").value;
+  state.templates.reminder = document.getElementById("tpl-reminder").value;
+  saveState();
+  showNotice("Modelli messaggi salvati.", "ok");
+}
+
+function flushSyncQueue() {
+  state.reports.forEach(r => { r.synced = true; });
+  state.queue = [];
+  saveState();
+  renderAll();
+  showNotice("Coda sincronizzazione allineata.", "ok");
+}
+
+function renderCompanySettings() {
+  document.getElementById("cfg-company").value = state.company.name;
+  document.getElementById("cfg-team").value = state.company.teamCode;
+  document.getElementById("cfg-pin").value = state.company.pin;
+  document.getElementById("cfg-webhook").value = state.company.webhook;
+}
+
+function saveCompanySettings() {
+  const name = document.getElementById("cfg-company").value.trim() || "TermoStufe & Caminetti Srl";
+  const team = document.getElementById("cfg-team").value.trim().toUpperCase() || "STUFE-2026";
+  const pin = document.getElementById("cfg-pin").value.trim() || "1234";
+  const webhook = document.getElementById("cfg-webhook").value.trim();
+
+  state.company = { name, teamCode: team, pin, webhook };
+  saveState();
+  renderAll();
+  showNotice("Impostazioni azienda e codice squadra salvate.", "ok");
+}
+
+function exportBackupJson() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `stufatech_backup_${state.company.teamCode}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showNotice("Backup JSON esportato.", "ok");
+}
+
+function resetDemoData() {
+  const fresh = structuredClone(DEFAULT_STATE);
+  fresh.role = state.role;
+  fresh.adminUnlocked = state.adminUnlocked;
+  state = fresh;
+  saveState();
+  renderAll();
+  showNotice("Dati di esempio ripristinati.", "ok");
+}
+
+function applyRoleLocks() {
+  const isTech = state.role === "tech";
+  document.getElementById("hdr-role").textContent = isTech ? "Modalità Tecnico" : "Ufficio / Admin";
+  document.getElementById("btn-toggle-role").textContent = isTech ? "Sblocca Ufficio (PIN)" : "Passa a Tecnico";
+
+  const lockedTabs = [
+    { id: "archivio", contentId: "archivio-content", lockId: "archivio-lock" },
+    { id: "storico", contentId: "storico-content", lockId: "storico-lock" },
+    { id: "scadenze", contentId: "scadenze-content", lockId: "scadenze-lock" },
+    { id: "azienda", contentId: "azienda-content", lockId: "azienda-lock" }
+  ];
+
+  lockedTabs.forEach(t => {
+    const contentEl = document.getElementById(t.contentId);
+    const lockEl = document.getElementById(t.lockId);
+    if (isTech && !state.adminUnlocked) {
+      contentEl.style.display = "none";
+      lockEl.innerHTML = `
+        <div class="card">
+          <div class="locked-box">
+            <h3 class="card-title">Area Riservata Ufficio / Admin</h3>
+            <p class="card-desc">In Modalità Tecnico l'accesso ad archivio, scadenze e configurazione è bloccato. Inserisci il PIN per sbloccare.</p>
+            <button type="button" class="btn btn-primary" onclick="promptUnlockAdmin()">Inserisci PIN Ufficio</button>
+          </div>
+        </div>
+      `;
+    } else {
+      contentEl.style.display = t.id === "archivio" ? "" : "block";
+      lockEl.innerHTML = "";
+    }
+  });
+}
+
+function promptUnlockAdmin() {
+  const entered = prompt("Inserisci il PIN Ufficio / Admin:");
+  if (entered === null) return;
+  if (entered.trim() === state.company.pin) {
+    state.adminUnlocked = true;
+    state.role = "admin";
+    saveState();
+    renderAll();
+    showNotice("Accesso Ufficio / Admin sbloccato.", "ok");
+  } else {
+    showNotice("PIN errato.", "err");
+  }
+}
+
+function toggleRoleFlow() {
+  if (state.role === "admin") {
+    state.role = "tech";
+    state.adminUnlocked = false;
+    saveState();
+    switchTab("compila");
+    renderAll();
+    showNotice("Modalità Tecnico attiva: compilazione rapida abilitata.", "ok");
+  } else {
+    promptUnlockAdmin();
+  }
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === tabName);
+  });
+  document.querySelectorAll(".view").forEach(v => {
+    v.classList.remove("active");
+  });
+  const target = document.getElementById(`view-${tabName}`);
+  if (target) target.classList.add("active");
+}
+
+function updateNetworkBadge() {
+  const badge = document.getElementById("hdr-net");
+  if (!badge) return;
+  if (navigator.onLine) {
+    badge.textContent = "Online • Sync Attivo";
+    badge.className = "pill pill-ok";
+  } else {
+    badge.textContent = "Offline • Coda Locale";
+    badge.className = "pill pill-warn";
+  }
+}
+
+function renderAll() {
+  document.getElementById("hdr-company").innerHTML =
+    `${escapeHtml(state.company.name)} &bull; Squadra: <strong id="hdr-team">${escapeHtml(state.company.teamCode)}</strong>`;
+  updateNetworkBadge();
+  applyRoleLocks();
+  renderArchive();
+  renderClientsHistory();
+  renderDueAndSync();
+  renderCompanySettings();
+}
+
+window.addEventListener("online", () => {
+  updateNetworkBadge();
+  if (state.queue.length > 0) {
+    flushSyncQueue();
+  }
+});
+
+window.addEventListener("offline", updateNetworkBadge);
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderChecklist();
+  initSignatureCanvas();
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById("f-data").value = today;
+  calcNextDueDate();
+  renderAll();
+});
+</script>
+</body>
+</html>
